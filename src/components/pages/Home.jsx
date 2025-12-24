@@ -52,12 +52,11 @@ export default function Home() {
   }, []);
 
   /* ---------------------- PRODUCTS ---------------------- */
-  const bestSelling = [
-    { id: 1, title: "Smart Watch", price: "$199", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=500" },
-    { id: 2, title: "Gaming Headset", price: "$79", img: "https://images.unsplash.com/photo-1585298723682-7115565b8196?w=500" },
-    { id: 3, title: "LED TV", price: "$499", img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500" },
-    { id: 4, title: "Smart Watch", price: "$199", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=500" },
-  ];
+  const [bestSellers, setBestSellers] = useState([]);
+  useEffect(() => {
+    api.get("/products/best-sellers")
+      .then(res => setBestSellers(res.data));
+  }, []);
 
   // const trending = [
   //   { id: 1, title: "Sneakers", price: "$89", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
@@ -128,13 +127,25 @@ export default function Home() {
             1024: { slidesPerView: 4 },
           }}
         >
-          {bestSelling.map((p) => (
-            <SwiperSlide key={p.id}>
+          {bestSellers.map(product => (
+            <SwiperSlide key={product.id}>
+              <Link
+                  key={product._id}
+                  to={`/product/${product._id}`}
+                  className="bg-white rounded-lg shadow hover:shadow-lg transition p-4"
+                >
               <div className="text-center">
-                <img src={p.img} className="h-32 sm:h-40 mx-auto object-cover" />
-                <h3 className="mt-2 text-sm font-semibold">{p.title}</h3>
-                <p className="text-green-600 text-sm">{p.price}</p>
+                  <img src={`http://localhost:5000/uploads/${product.images?.[0]}`} className="h-32 sm:h-40 mx-auto object-cover rounded-md" />
+                  <h3 className="mt-3 text-sm font-semibold truncate">
+                    {product.title}
+                  </h3>
+
+                  <p className="text-green-600 text-sm font-bold mt-1">
+                    ₹{product.price}
+                  </p>
+               
               </div>
+               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
