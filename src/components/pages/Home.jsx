@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-
+import { Link } from "react-router-dom";
+import api from "../../api/axiosClient";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -58,12 +59,17 @@ export default function Home() {
     { id: 4, title: "Smart Watch", price: "$199", img: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=500" },
   ];
 
-  const trending = [
-    { id: 1, title: "Sneakers", price: "$89", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-    { id: 2, title: "Perfume", price: "$59", img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500" },
-    { id: 3, title: "Handbag", price: "$149", img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500" },
-  ];
-
+  // const trending = [
+  //   { id: 1, title: "Sneakers", price: "$89", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
+  //   { id: 2, title: "Perfume", price: "$59", img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500" },
+  //   { id: 3, title: "Handbag", price: "$149", img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500" },
+  // ];
+  const [trendings, setTrendings] = useState([]);
+  useEffect(() => {
+    api.get("/products/trending").then(res => {
+      setTrendings(res.data);
+    });
+  }, []);
   return (
     <div className="bg-gray-100">
 
@@ -148,17 +154,31 @@ export default function Home() {
             1024: { slidesPerView: 4 },
           }}
         >
-          {trending.map((p) => (
-            <SwiperSlide key={p.id}>
-              <a href={`/product/${p.id}`}>
+          {trendings.map((product) => (
+            <SwiperSlide key={product._id}>
+              <Link
+                to={`/product/${product._id}`}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition block p-4"
+              >
                 <div className="text-center">
-                  <img src={p.img} className="h-32 sm:h-40 mx-auto object-cover" />
-                  <h3 className="mt-2 text-sm font-semibold">{p.title}</h3>
-                  <p className="text-green-600 text-sm">{p.price}</p>
+                  <img
+                    src={`http://localhost:5000/uploads/${product?.images?.[0]}`}
+                    alt={product.title}
+                    className="h-32 sm:h-40 mx-auto object-cover rounded-md"
+                  />
+
+                  <h3 className="mt-3 text-sm font-semibold truncate">
+                    {product.title}
+                  </h3>
+
+                  <p className="text-green-600 text-sm font-bold mt-1">
+                    ₹{product.price}
+                  </p>
                 </div>
-              </a>
+              </Link>
             </SwiperSlide>
           ))}
+
         </Swiper>
       </section>
 
