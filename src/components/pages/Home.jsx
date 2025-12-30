@@ -135,7 +135,7 @@ export default function Home() {
                   className="bg-white rounded-lg shadow hover:shadow-lg transition p-4"
                 >
               <div className="text-center">
-                  <img src={`http://localhost:5000/uploads/${product.images?.[0]}`} className="h-32 sm:h-40 mx-auto object-cover rounded-md" />
+                  <img src={`${import.meta.env.VITE_API_URL}/uploads/${product.images?.[0]}`} className="h-32 sm:h-40 mx-auto object-cover rounded-md" />
                   <h3 className="mt-3 text-sm font-semibold truncate">
                     {product.title}
                   </h3>
@@ -173,7 +173,7 @@ export default function Home() {
               >
                 <div className="text-center">
                   <img
-                    src={`http://localhost:5000/uploads/${product?.images?.[0]}`}
+                    src={`${import.meta.env.VITE_API_URL}/uploads/${product?.images?.[0]}`}
                     alt={product.title}
                     className="h-32 sm:h-40 mx-auto object-cover rounded-md"
                   />
