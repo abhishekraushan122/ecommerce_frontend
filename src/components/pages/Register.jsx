@@ -2,7 +2,7 @@
 import React, { useContext, useState } from "react";
 import api from "../../api/axiosClient";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const { setToken, setUser } = useContext(AuthContext);
