@@ -45,7 +45,7 @@ export default function Register() {
           {loading ? "Registering..." : "Register"}
         </button>
       </form>
-      <p className="text-center mt-4 text-gray-600">Already have an account? <a href="/login" className="text-blue-600">Login</a></p>
+      <p className="text-center mt-4 text-gray-600">Already have an account? <Link to="/login" className="text-blue-600">Login</Link></p>
     </div>
   );
 }

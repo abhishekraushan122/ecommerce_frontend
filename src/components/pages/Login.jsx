@@ -41,7 +41,7 @@ export default function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-      <p className="text-center mt-4 text-gray-600">Don't have an account? <a href="/register" className="text-blue-600">Register</a></p>
+      <p className="text-center mt-4 text-gray-600">Don't have an account? <Link to="/register" className="text-blue-600">Register</Link></p>
     </div>
   );
 }
