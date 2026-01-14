@@ -1,24 +1,58 @@
-export default function Cart(){
-const cart = [
-{ id: 1, title: "Laptop X5", price: 65000, qty: 1 },
-{ id: 2, title: "Smartwatch Pro", price: 3999, qty: 2 }
-];
+import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
+export default function Cart() {
+  const { cartItems, removeFromCart } = useCart();
 
-return (
-<div>
-<h2 className="text-3xl font-bold mb-6">Your Cart</h2>
-{cart.map(item => (
-<div key={item.id} className="p-4 bg-white shadow rounded mb-4 flex justify-between items-center">
-<div>
-<h3 className="font-bold text-lg">{item.title}</h3>
-<p>Quantity: {item.qty}</p>
-</div>
-<p className="font-bold text-blue-600">₹{item.price}</p>
-</div>
-))}
-<button className="mt-6 px-6 py-3 bg-blue-600 text-white rounded">Checkout</button>
-</div>
-);
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
+
+  if (!cartItems.length) {
+    return (
+      <div className="text-center mt-10">
+        <p>Your cart is empty</p>
+        <Link to="/products" className="text-blue-600">
+          Go shopping
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto bg-white shadow p-6 rounded-lg">
+      <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+
+      {cartItems.map(item => (
+        <div key={item._id} className="flex gap-4 border-b py-4">
+          <img
+            src={`/uploads/${item.image}`}
+            className="w-20 h-20 object-cover rounded"
+          />
+
+          <div className="flex-1">
+            <h3 className="font-semibold">{item.title}</h3>
+            <p>₹{item.price}</p>
+            <p>Qty: {item.qty}</p>
+          </div>
+
+          <button
+            onClick={() => removeFromCart(item._id)}
+            className="text-red-600"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+
+      <div className="text-right mt-6 font-bold text-xl">
+        Total: ₹{total}
+      </div>
+
+      <button className="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg">
+        Proceed to Checkout
+      </button>
+    </div>
+  );
 }
-

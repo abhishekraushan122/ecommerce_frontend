@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import api from "../../api/axiosClient.js";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
+import { successToast, errorToast } from "../../utils/toast.js";
 
 export default function Login() {
   const { setToken, setUser } = useContext(AuthContext);
@@ -19,11 +20,11 @@ export default function Login() {
       const { token, user } = res.data;
       setToken(token);
       setUser(user);
-      alert("Login successful");
+      successToast("Login successful 🎉");
       navigate("/");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || "Login failed");
+      errorToast(err?.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }

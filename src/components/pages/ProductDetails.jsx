@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api/axiosClient";
+import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
+import { successToast, errorToast } from "../../utils/toast";
+
 
 export default function ProductDetails() {
   const { id } = useParams();
-
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
-
+  const isWishlisted = wishlist.some(
+    (item) => item._id === product._id
+  );
   useEffect(() => {
     api.get(`/products/${id}`)
       .then(res => {
@@ -103,13 +110,22 @@ export default function ProductDetails() {
         <div className="flex gap-4 mt-6">
           <button
             disabled={product.countInStock === 0}
+            onClick={() => addToCart(product, qty)}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
           >
             Add to Cart
           </button>
 
-          <button className="px-4 py-3 border rounded-lg hover:bg-gray-100">
-            ❤️
+          <button
+            onClick={() =>
+              isWishlisted
+                ? removeFromWishlist(product._id)
+                : addToWishlist(product._id)
+            }
+            className={`px-4 py-2 rounded ${isWishlisted ? "bg-red-600" : "bg-gray-200"
+              }`}
+          >
+            {isWishlisted ? "❤️ Wishlisted" : "🤍 Add to Wishlist"}
           </button>
         </div>
 
